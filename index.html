@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>СТРОЙТЕХ — аренда спецтехники с оператором</title>
+  <meta name="description" content="Аренда спецтехники с оператором: экскаваторы, погрузчики, манипулятор, самосвал. Статус техники в реальном времени и расчёт стоимости онлайн.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    // Apply the saved or system theme before the first paint
+    (function () {
+      var t;
+      try { t = localStorage.getItem('stroytech.theme'); } catch (e) {}
+      if (t !== 'light' && t !== 'dark') t = window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', t);
+    })();
+  </script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <header class="header">
+    <div class="container header__inner">
+      <a href="#top" class="brand">
+        <span class="brand__icon"><i data-icon="truck"></i></span>
+        <span class="brand__text"><b>СТРОЙТЕХ</b><small>Аренда спецтехники с оператором</small></span>
+      </a>
+      <div class="header__meta">
+        <span><span class="dot"></span> Работаем ежедневно</span>
+      </div>
+      <div class="header__actions">
+        <button class="theme-toggle" type="button" data-theme-toggle aria-label="Переключить тему"><i data-icon="moon" class="is-moon"></i><i data-icon="sun" class="is-sun"></i></button>
+        <a class="btn btn--light header__order" href="#calc"><i data-icon="calc"></i> <span class="header__order-full">Рассчитать стоимость</span><span class="header__order-short">Заявка</span></a>
+        <a class="btn btn--accent header__wa" href="https://wa.me/77712267768" target="_blank" rel="noopener" aria-label="Написать в WhatsApp"><i data-icon="chat"></i> <span>Написать в WhatsApp</span></a>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+
+    <!-- Hero -->
+    <section class="container">
+      <div class="hero">
+        <div class="hero__text">
+          <span class="hero__chip"><i data-icon="hardhat"></i> Аренда спецтехники с оператором</span>
+          <h1>Спецтехника с&nbsp;оператором <span>под ваши задачи</span></h1>
+          <p class="hero__lead">Выберите технику, укажите объём работ и получите предварительный расчёт аренды за минуту.</p>
+          <div class="hero__actions">
+            <a class="btn btn--accent btn--lg" href="#park">Подобрать технику <i data-icon="arrowDown"></i></a>
+            <a class="btn btn--outline btn--lg" href="https://wa.me/77712267768" target="_blank" rel="noopener"><i data-icon="chat"></i> Написать в WhatsApp</a>
+          </div>
+          <div class="hero__stats">
+            <div><b id="statTotal">6</b><span id="statTotalLabel">единиц техники</span></div>
+            <div><b id="statFree">0</b><span>свободно сейчас</span></div>
+            <div><b id="statMin">от 4 ч</b><span>минимальный заказ</span></div>
+          </div>
+        </div>
+        <div class="hero__photo" role="img" aria-label="Гусеничный экскаватор на объекте"></div>
+        <div class="hero__badge"><small>Готовы к работе</small><b>Проверенная техника</b></div>
+      </div>
+
+      <div class="features">
+        <div><span class="features__icon"><i data-icon="garage"></i></span><p><b>Собственный парк</b><small>Обслужена и готова к работе</small></p></div>
+        <div><span class="features__icon"><i data-icon="calc"></i></span><p><b>Прозрачная цена</b><small>Расчёт стоимости онлайн</small></p></div>
+        <div><span class="features__icon"><i data-icon="hardhat"></i></span><p><b>Техника с оператором</b><small>Опытные машинисты</small></p></div>
+        <div><span class="features__icon"><i data-icon="calendar"></i></span><p><b>Работаем без выходных</b><small>В удобное для вас время</small></p></div>
+      </div>
+    </section>
+
+    <!-- Fleet -->
+    <section class="section container" id="park">
+      <div class="section__head">
+        <div>
+          <p class="eyebrow">Наш парк</p>
+          <h2>Выберите технику под задачу</h2>
+        </div>
+        <p class="section__aside">Вся техника обслужена, укомплектована и работает с опытным оператором. Статус обновляется в реальном времени.</p>
+      </div>
+      <div class="fleet" id="fleet"></div>
+    </section>
+
+    <!-- Calculator -->
+    <section class="band" id="calc">
+     <div class="container">
+      <div class="section__head">
+        <div>
+          <p class="eyebrow">Расчёт аренды</p>
+          <h2>Укажите детали работы</h2>
+          <p class="section__sub">Заполните параметры объекта — сумма пересчитывается автоматически.</p>
+        </div>
+      </div>
+
+      <div class="calc">
+        <form class="panel form" id="orderForm" novalidate>
+          <label class="field">
+            <span class="field__label">Выбранная техника</span>
+            <span class="input"><i data-icon="truck"></i><select id="machine"></select></span>
+            <span class="field__error" data-err="machine"></span>
+          </label>
+
+          <label class="field">
+            <span class="field__label">Адрес объекта</span>
+            <span class="input"><i data-icon="pin"></i><input id="address" type="text" placeholder="Город, улица, дом или ориентир" autocomplete="street-address"></span>
+            <span class="field__error" data-err="address"></span>
+          </label>
+
+          <div class="form__row">
+            <label class="field">
+              <span class="field__label" id="amountLabel">Количество часов</span>
+              <span class="input"><i data-icon="clock"></i><input id="amount" type="number" min="1" max="720" value="8" inputmode="numeric"></span>
+            </label>
+            <label class="field">
+              <span class="field__label">Зона доставки</span>
+              <span class="input input--plain"><select id="zone"></select></span>
+            </label>
+          </div>
+
+          <div class="notice" id="notice" hidden><i data-icon="info"></i><p id="noticeText"></p></div>
+
+          <label class="field">
+            <span class="field__label">Ваше имя</span>
+            <span class="input"><i data-icon="user"></i><input id="name" type="text" placeholder="Как к вам обращаться" autocomplete="name"></span>
+            <span class="field__error" data-err="name"></span>
+          </label>
+
+          <label class="field">
+            <span class="field__label">Комментарий</span>
+            <span class="input input--area"><i data-icon="message"></i><textarea id="comment" rows="3" placeholder="Например: нужно подготовить площадку под фундамент"></textarea></span>
+          </label>
+        </form>
+
+        <aside class="summary" aria-live="polite">
+          <div class="summary__head">
+            <span class="summary__icon"><i data-icon="doc"></i></span>
+            <div><small>Расчёт заказа</small><b>Примерная стоимость</b></div>
+          </div>
+          <dl class="summary__rows" id="rows"></dl>
+          <div class="summary__total">
+            <span>Итого</span>
+            <b id="total">0 ₸</b>
+          </div>
+          <button class="btn btn--accent btn--block" type="submit" form="orderForm">
+            <i data-icon="chat"></i> Отправить заявку в WhatsApp <i data-icon="arrowRight"></i>
+          </button>
+          <p class="summary__note">Цена предварительная, топливо и оператор включены. Менеджер подтвердит заказ в WhatsApp.</p>
+          <p class="summary__status" id="status" hidden></p>
+        </aside>
+      </div>
+     </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <a href="#top" class="brand">
+        <span class="brand__icon"><i data-icon="truck"></i></span>
+        <span class="brand__text"><b>СТРОЙТЕХ</b><small>Аренда спецтехники</small></span>
+      </a>
+      <div class="footer__links">
+        <a href="https://wa.me/77712267768" target="_blank" rel="noopener">WhatsApp: +7 771 226 77 68</a>
+        <a href="admin.html" class="footer__owner"><i data-icon="lock"></i> Вход для владельца</a>
+      </div>
+    </div>
+    <p class="container credits">
+      Фото: Wikimedia Commons —
+      <a href="https://commons.wikimedia.org/wiki/File:Caterpillar_302.7D_excavator_on_Barrow_Street.jpg" target="_blank" rel="noopener">Grendelkhan</a>,
+      <a href="https://commons.wikimedia.org/wiki/File:Hyundai_140LC_Crawler_Excavator_-_geograph.org.uk_-_8224278.jpg" target="_blank" rel="noopener">Oscar Taylor</a>,
+      <a href="https://commons.wikimedia.org/wiki/File:JCB_3CX_ECO_backhoe_loader_at_VDNKh,_Moscow.jpg" target="_blank" rel="noopener">Dmitry Ivanov</a>,
+      <a href="https://commons.wikimedia.org/wiki/File:Caterpillar_950k_Wheel_Loader.jpg" target="_blank" rel="noopener">Matthew T Rader</a>,
+      <a href="https://commons.wikimedia.org/wiki/File:Mercedes-Benz_Atego_(P1032721).jpg" target="_blank" rel="noopener">Matti Blume</a>
+      (CC BY-SA), <a href="https://commons.wikimedia.org/wiki/File:Tatra_815_S1_one-way_tipper_truck_unloading_soil.jpg" target="_blank" rel="noopener">Oto Zapletal</a> (CC BY).
+    </p>
+  </footer>
+
+  <script src="common.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
